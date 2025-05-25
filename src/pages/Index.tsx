@@ -1,12 +1,44 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Portfolio from "@/components/Portfolio";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
 const Index = () => {
+  const [activeSection, setActiveSection] = useState("home");
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case "about":
+        return <About />;
+      case "portfolio":
+        return <Portfolio />;
+      case "contact":
+        return <Contact />;
+      default:
+        return <Hero setActiveSection={setActiveSection} />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-800">
+      <Header activeSection={activeSection} setActiveSection={setActiveSection} />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeSection}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+        >
+          {renderSection()}
+        </motion.div>
+      </AnimatePresence>
+      <Footer />
     </div>
   );
 };
